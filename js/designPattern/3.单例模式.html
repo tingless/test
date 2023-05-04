@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // class SingleDog {
+        //     show(){
+        //         console.log('this is single dog');
+        //     }
+
+        //     static born(){
+        //         if(!SingleDog.instance){
+        //             SingleDog.instance =  new SingleDog()
+        //         }
+        //         return SingleDog.instance
+        //     }
+        // }
+        // const s1 = SingleDog.born()
+        // const s2 = SingleDog.born()
+        // console.log(s1 === s2);
+
+
+
+        class SingleDog {
+            show(){
+                console.log('this is single dog')
+            }
+        }
+
+        SingleDog.getInstance = (function(){
+            let instance = null
+
+            return function(){
+                if(!instance){
+                    instance = new SingleDog()
+                }
+                return instance
+            }
+        })()
+
+        let s3 = (function(){
+            console.log(123);
+
+            return function(){
+                console.log(999);
+            }
+        })()
+
+        s3()
+
+        const s1 = SingleDog.getInstance()
+        const s2 = SingleDog.getInstance()
+        console.log('SingleDog.getInstance', s1, s2, s1 === s2);
+
+
+        // 闭包的变量什么时候被销毁？
+
+
+
+        // class Storage {
+        //     static getInstance(){
+        //         if(!Storage.instance){
+        //             return Storage.instance = new Storage()
+        //         }
+        //         return Storage.instance
+        //     }
+
+        //     setItem(key,value){
+        //         localStorage.setItem(key,value)
+        //     }
+
+        //     getItem(key,value){
+        //         localStorage.getItem(key,value)
+        //     }
+        // }
+
+        // const test1 = Storage.getInstance()
+        // const test2 = Storage.getInstance()
+        // console.log('test', test1 === test2);
+
+
+        class Storage {
+            setItem(key,value){
+                localStorage.setItem(key,value)
+            }
+
+            getItem(key,value){
+                localStorage.getItem(key,value)
+            }
+        }
+
+        Storage.getInstance = (function(){
+            let instance = null
+            
+            return function(){
+                if(!instance){
+                    instance = new Storage()
+                }
+                return instance
+            }
+        })()
+
+        const test1 = Storage.getInstance()
+        const test2 = Storage.getInstance()
+        console.log('test', test1 === test2);
+    </script>
+</body>
+</html>

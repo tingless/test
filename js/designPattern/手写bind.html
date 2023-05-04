@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        // 和这种情况差不多
+        let obj1 = {
+            name: 'zxx',
+            getName(){
+                console.log('self', this.name);
+            }
+        }
+
+        let obj2 = {
+            name: 'hhh'
+        }
+
+        obj1.getName.call(obj2)
+
+        // 数组的slice方法不传2个参数，可以用来把类数组转化为数组
+
+
+        Function.prototype.myBind = function(context){
+            // 因为是以对象的形式调用，所以this指向该对象
+            // 和这个方法在对象身上还是构造函数的原型链身上无关
+            // 函数也是个对象
+            console.log('this', this, context);
+            // 其实就是为了执行这个方法，进行this的保留，不然等到执行的时候会丢失
+            var self = this
+            return function(){
+                return self.apply(context, arguments)
+            }
+        }
+
+        // let obj = {
+        //     name: 'zxx'
+        // }
+
+        // let func = function(){
+        //     console.log(this.name);
+        // }
+
+        // 
+        // let hhh = func.myBind(obj)
+        // hhh()
+
+        Function.prototype.highBind = function(){
+            var self = this
+            context = Array.prototype.shift.apply(arguments)
+            args = Array.prototype.slice.apply(arguments)
+            console.log('context', );
+            return function(){
+                return self.apply(context, args.concat(Array.prototype.slice.apply(arguments)))
+            }
+        }
+
+        var objEnd = {
+            name: 'zxx'
+        }
+
+        let func1 = function(a, b, c, d){
+            console.log(this.name);
+            console.log(a, b, c, d);
+        }
+
+        // 
+        let hhh1 = func1.highBind(objEnd, 1, 2)
+        hhh1(3, 4)
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="div1"></div>
+
+    <script>
+
+        var obj = {
+            getName(){
+                return this.name
+            },
+            name: 'zxx'
+        }
+
+        var obj1 = {
+            name: 'plw'
+        }
+
+        // console.log(obj.getName(), obj.getName.call(obj1));
+
+        
+        var div1 = document.getElementById("div1")
+        // console.log(div1);
+
+        // var getId = document.getElementById
+        // console.log(getId('div1'));
+
+        // 因为getId引用之后就变成了普通函数调用，改变了document.getElementById内部this的指向所以报错了
+        // document.getElementById的this实际上指向document对象
+
+        // 修正做法
+        document.getElementById = (function(func){
+            return func.bind(document)
+            // return function(){
+            //     return func.apply(document, arguments)
+            // }
+        })(document.getElementById)
+        
+        var getId = document.getElementById
+
+
+        console.log(getId('div1'), document);
+
+        // 立即执行函数会直接外部的function
+        var test = (function(){
+            console.log('arguments');
+        })()
+        // console.log('arguments', test);
+    </script>
+</body>
+</html>

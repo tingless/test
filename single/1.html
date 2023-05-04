@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <hoc></hoc>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+    <script>    
+        const withPromise = (wrapped, promiseFn) => {
+        return {
+                data() { 
+                    return {
+                        loading: false,
+                        error: false,
+                        result: null
+                    }
+                 },
+                async mounted() { 
+                    this.loading = true;
+                    const { requestParams } = this.$refs.wrapped
+                    console.log('requestParams',requestParams);
+                    const result = await promiseFn(requestParams).finally(() => {
+                        this.loading = false;
+                    });
+                    this.result = result; 
+                },
+                render(h) {
+                    const arg = {
+                        props: {
+                            result: this.result,
+                            loading: this.loading,
+                        },    
+                        ref: 'wrapped'
+                    }
+                    const wrapper = h("div", [
+                        h(wrapped, arg),
+                        this.loading ? h("span", ["加载中...."]) : null,
+                        this.error ? h("span", ["加载错误"]) : null
+                    ])
+
+                    return wrapper
+                },
+            };
+        };
+
+
+        const view = {
+            template: `
+                <span>
+                <span>{{result?.name}}</span>
+                </span>
+            `,
+            data(){
+                return {
+                    requestParams:{
+                        name:' 123123'
+                    }
+                }
+            },
+            props: ["result", "loading"],
+        };
+
+        const request = (params) => {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                resolve(params);
+                }, 1000);
+            });
+        };
+
+        const hoc = withPromise(view, request)
+
+        new Vue({
+            el: '#app',
+            components: {
+                hoc
+            }
+        })
+
+
+    </script>
+</body>
+</html>

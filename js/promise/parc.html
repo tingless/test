@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 知道大概promise内部是怎么实现原理
+
+        let p = new Promise((resolve, reject)=>{
+            resolve('res')
+        })
+
+        p.then(res=>{
+            console.log('res', res);
+        })
+
+
+        class myPromise {
+            constructor(func){
+                this.status = 'pending'
+                this.result = null
+                this.waitResolveFunc = []
+                this.waitRejectFunc = []
+
+                try{
+                    func(this.resolve.bind(this), this.reject.bind(this))
+                }catch(e){
+                    this.reject(e)
+                }
+            }
+
+            resolve(value){
+                if(this.status === 'pending'){
+                    this.status = 'resolved'
+                    this.result = value
+                    this.waitResolveFunc.forEach((func)=>{
+                        setTimeout(()=>{
+                            func.apply(this,value)
+                        })
+                    })
+                }
+            }
+
+            reject(reason){
+                if(this.status === 'pending'){
+                    this.status = 'rejected'
+                    this.result = reason
+                    this.waitRejectFunc.forEach((func)=>{
+                        setTimeout(()=>{
+                            func.apply(this,value)
+                        })
+                    })
+                }
+            }
+
+            then(onFulfilled, onRejected){
+                onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : value => value
+                onRejected = typeof onRejected === 'function' ? onRejected : reason => reason
+                if(this.status === 'pending'){
+                    this.waitResolveFunc.push(onFulfilled)
+                    this.waitRejectFunc.push(onRejected)
+                }
+                if(this.status === 'resolved'){
+                    setTimeout(()=>{
+                        onFulfilled(this.result)
+                    })
+                }
+                if(this.status === 'rejected'){
+                    setTimeout(()=>{
+                        onRejected(this.result)
+                    })
+                }
+            }
+
+        }
+    </script>
+</body>
+</html>

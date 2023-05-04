@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let obj1 = {
+            name: 'zxx'
+        }
+
+        let obj2 = {
+            name: 'jjj',
+            getName(a,b){
+                console.log(this.name, a, b);
+                return this.name
+            }
+        }
+
+
+
+        Function.prototype.myCall = function(context){
+            context = context || window
+            let key = Symbol()
+            context[key] = this
+            let args = [...arguments].slice(1)
+            let res = context[key](...args)
+            delete context[key]
+            return res
+        }
+
+        Function.prototype.myApply = function(context, ...args){
+            console.log('arguments', args[0], ...args);
+            context = context || window
+            let key = Symbol()
+            context[key] = this
+            // let args = Array.prototype.slice.call(arguments)[1]
+            // 得出来是数组
+            let res = context[key](...args[0])
+            delete context[key]
+            return res
+        }
+        
+
+        // obj2.getName.myCall(obj1, 2, 3)
+
+        obj2.getName.myApply(obj1, [2, 3])
+        // obj2.getName.apply(obj1, [2, 3])
+
+    </script>
+</body>
+</html>

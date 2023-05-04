@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="div1">test</div>
+    <script>
+
+        var func = function(a, b, c){
+            console.log([a, b, c]);
+        }
+
+        func.apply(null, [1, 2])
+
+        func.call(null, 1, 2, 4)
+
+        
+
+        console.log(Math.max.apply(null, [1, 2, 3, 4]));
+
+
+
+        window.name = 'not zxx'
+        var obj = {
+            name: 'zxx',
+            getName(){
+                console.log(this.name);
+            },
+            getOtherName(){
+                var func = function(){
+                    console.log(this.name);
+                }
+                func()
+            }
+        }
+        obj.getName()
+        obj.getOtherName() //虽然是在对象的内部执行的，但是还是作为普通函数调用，this指向window
+
+
+        var div = document.getElementById("div1")
+        let tt = div.onclick = function(){
+            // 这里的this就是指向这个节点，这个节点其实也是一个Object对象
+            // onClick事件也是这个节点的一个属性 相当于作为对象的方法调用
+            console.log(this, this.id, typeof this);
+            var func = function(){
+                // 打印出来为window
+                console.log(this === window, this);
+            }
+            
+            // 关键是开函数是怎么被调用的
+            func.apply(this, arguments)
+            // func()
+        }
+
+        tt() // 这里this就会指向window了
+
+    </script>
+</body>
+</html>

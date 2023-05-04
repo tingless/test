@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // https://juejin.cn/post/7043758954496655397#heading-7
+
+        let upload = ()=>{
+            console.log('upload');
+        }
+    
+        function load(){
+            console.log('load me');
+        }
+
+        load()
+
+        upload()
+
+        // 传入一个函数(函数表达式/执行函数) 接受两个参数固定（resolve, reject）
+        // 并且在这个函数执行的时候执行resolve/reject
+        // (resolve, reject)=>{
+        //     resolve('成功')
+        // } 
+
+        let p1 = new Promise((resolve, reject)=>{
+            // 关键在于你可以让函数异步处理完成之后再执行resolve
+            setTimeout(()=>{
+                resolve('成功')
+            }, 2000)
+        })
+
+        // console.log('p1', p1);
+
+        
+        // p1.then((res)=>{
+        //     console.log('res',res);
+        // })
+        // .catch((err)=>{
+        //     console.log('err',err);
+        // })
+
+
+        class myPromise {
+
+            constructor(func){
+                this.status = 'pending'
+                this.result = null
+                func(this.resolve.bind(this), this.reject.bind(this))
+            }
+
+            resolve(value){
+                if(this.status === 'pending'){
+                    this.status = 'fulfilled'
+                    this.result = value
+
+                }
+            }
+
+            reject(reason){
+                if(this.status === 'pending'){
+                    this.status = 'rejected'
+                    this.result = reason
+
+                }
+            }
+
+            then(onFulfilled, onRejected){
+                if(this.status === 'fulfilled'){
+                    onFulfilled(this.result)
+                }
+                if(this.status === 'rejected'){
+                    onRejected(this.result)
+                }
+            }
+        }
+
+        let testP = new myPromise((resolve, reject)=>{
+            // resolve('hhh')
+        })
+
+        console.log('test');
+
+        testP.then((res)=>{
+            console.log('res hhhhhh',res);
+        })
+
+        console.log('_________________');
+
+        let p3 = new Promise((resolve, reject)=>{
+            throw new Error('this is a test error!')
+        })
+
+        p3.catch(e=>{
+            console.log('e',e);
+        })
+
+
+    </script>
+</body>
+</html>

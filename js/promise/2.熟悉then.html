@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let p1 = new Promise((resolve, reject)=>{
+            // 再函数报错的时候要catch一下
+            throw new Error('error')
+        })
+
+        p1.then(null, e=>{
+            console.log('error',e);
+        })
+
+
+        class myPromise {
+
+            constructor(func){
+                this.status = 'pending'
+                this.result = null
+                try{
+                    func(this.resolve.bind(this), this.reject.bind(this))
+                }catch(e){
+                    reject(e)
+                }
+            }
+
+            resolve(value){
+                if(this.status === 'pending'){
+                    this.status = 'fulfilled'
+                    this.result = value
+
+                }
+            }
+
+            reject(reason){
+                if(this.status === 'pending'){
+                    this.status = 'rejected'
+                    this.result = reason
+
+                }
+            }
+
+            then(onFulfilled, onRejected){
+                if(this.status === 'fulfilled'){
+                    onFulfilled(this.result)
+                }
+                if(this.status === 'rejected'){
+                    onRejected(this.result)
+                }
+            }
+        }
+
+
+        // let myP = 
+    </script>
+</body>
+</html>

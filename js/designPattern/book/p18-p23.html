@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 所有对象的跟对象是Object.prototype对象 是个空对象,因为Object.prototype没有prototype
+        var obj1 = new Object()
+        var obj2 = {}
+
+        // console.log(Object.prototype, Object.getPrototypeOf(obj1) === Object.prototype, obj1);
+
+        function Dog(name){
+            this.name = name
+        }
+
+        let doddy = new Dog('tiantian')
+
+        // console.log('prototype', Dog, Dog.prototype, Object.getPrototypeOf(doddy), Dog.prototype === Object.getPrototypeOf(doddy));
+
+
+        var obj3 = {
+            name: 'yellow'
+        }
+
+        var A = function(){}
+        A.prototype = obj3
+
+        let a = new A()
+
+        // console.log(a.name);
+
+        // because a._proto_ === A.prototype = obj3
+
+        var C = function(){}
+        C.prototype.name = 'red'
+
+        var D = function(){}
+        D.prototype = new C()
+        var d = new D()
+        console.log('d', d.name, d);
+    </script>
+</body>
+</html>

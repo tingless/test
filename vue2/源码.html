@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class Observer {
+            constructor(value){
+                this.value = value
+                // 打个标记避免重复处理
+                this.__ob__ = this
+
+                if(Array.isArray(value)){
+                    // 数组有单独的处理方式
+                }else{
+                    this.walk(value)
+                }
+            }
+
+            walk(object){
+                // 拿到所有的对象的属性，为数组形式
+                const keys = Object.keys(object)
+                for(let i = 0; i<keys.length; i++){
+                    defineReactive(object, keys[i])
+                }
+            }
+        }
+
+        function defineReactive(obj, key, val){
+            if(arguments.length === 2){
+                val = obj[key]
+            }
+            // 递归循环操作
+            if(typeof val === 'object'){
+                new Observer(val)
+            }
+            
+            // val就是最外面定义的值
+            Object.defineProperty(obj, key, {
+                enumerable: true,
+                configurable: true,
+                get(){
+                    console.log(`${key} 我被读取了 ${val}`);
+                    return val
+                },
+                set(newVal){
+                    if(newVal === val){
+                        return
+                    }
+                    console.log(`${key} 我被修改了`);
+                    val = newVal
+                }
+
+            })
+
+        }
+
+        let car = new Observer({
+            'brand':'BMW',
+            'price':3000,
+        })
+        
+        
+    </script>
+</body>
+</html>

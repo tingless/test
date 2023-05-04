@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var cost = (function(){
+            let args = []
+            return function(){
+                if(arguments.length === 0){
+                    let money = 0
+                    for(i = 0; i < args.length; i++){
+                        money += args[i]
+                    }
+                    return money
+                }else{
+                    Array.prototype.push.apply(args, arguments)
+                    // args.push(...arguments)
+                }
+            }
+        })()
+        cost(100)
+        cost(200)
+        cost(300)
+
+        console.log(cost());
+
+        // 编辑通用函数
+
+        function Currying(fn){
+            let args = []
+            return function(){
+                if(arguments.length === 0){
+                    return fn.apply(this, args)
+                }else{
+                    Array.prototype.push.apply(args, arguments)
+                }
+            }
+        }
+
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class MobileFactory{
+            createOS(){
+                throw new Error("不能被调用 需要重写")
+            }
+            createHardWare(){
+                throw new Error("不能被调用 需要重写")
+            }
+        }
+
+        class OS{
+            controlHardWave(){
+                throw new Error("不能被调用 需要重写")
+            }
+        }
+        
+        class HardWare{
+            controlHardWave(){
+                throw new Error("不能被调用 需要重写")
+            }
+        }
+
+        class IosOS extends OS{
+            controlHardWave(){
+                console.log('caozuo');
+            }
+        }
+
+        class testHardWare extends HardWare{
+            controlHardWave(){
+                console.log('start operation');
+            }
+        }
+
+        class ZxxPhone extends MobileFactory{
+            createOS(){
+                return new IosOS()
+            }
+            createHardWare(){
+                return new testHardWare()
+            }
+        }
+
+        const myPhone = new ZxxPhone()
+        const myOS = myPhone.createOS()
+        const myHardWare =myPhone.createHardWare()
+
+        myOS.controlHardWave()
+        myHardWare.controlHardWave()
+
+
+
+
+
+
+    </script>
+</body>
+</html>
